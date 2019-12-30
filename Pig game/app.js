@@ -1,5 +1,5 @@
 var firstPlayer, secondPlayer, activePlayer, diceDOM, dice, 
-    roundSocre, notWinner;
+    roundSocre, notWinner, previousNumber, maxPoints;
 
 declareElements();
 setNumbersToStart();
@@ -15,8 +15,15 @@ document.getElementById('btn-roll-dice').addEventListener('click', function(){
         diceDOM.src = 'dice-' + dice + '.png';
     
         if (dice !== 1 ){
-            roundScore += dice
-            activePlayer.currentScoreElement.textContent = roundScore;
+            if (previousNumber === 6 && dice === 6){
+                activePlayer.globalScore = 0;
+                switchPlayer();
+            } else {
+                previousNumber = dice;
+
+                roundScore += dice
+                activePlayer.currentScoreElement.textContent = roundScore;
+            }
         } else {
             switchPlayer();
         }
@@ -60,6 +67,7 @@ function setNumbersToStart(){
     diceDOM.style.display = 'none';
     activePlayer.playerPanel.classList.toggle('active');
     notWinner = true;
+    previousNumber = 0;
 }
 
 function declareElements(){
@@ -83,7 +91,7 @@ function switchPlayer(){
     activePlayer.playerPanel.classList.toggle('active');
 
     activePlayer === firstPlayer ? activePlayer = secondPlayer : activePlayer = firstPlayer;
-
+    previousNumber = 0;
     roundScore = 0;
     activePlayer.playerPanel.classList.toggle('active');
     diceDOM.style.display = 'none';
